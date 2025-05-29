@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            sr.color = Color.black;
+            sr.color = Color.white;
             transform.localScale = new Vector3(1f, 1f, 1f);
             col.size = new Vector2(1f, 1f);
         }
