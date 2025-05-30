@@ -18,7 +18,11 @@ public class ShadowFollower : MonoBehaviour
 
     private SpriteRenderer sr;
     private SpriteRenderer playerSR;
-  
+
+    public bool playerIsClimbing;
+    private Vector2 ladderTargetPosition;
+    private bool shadowClimbing = false;
+    private float climbDelay = 0.4f;
 
     void Start()
     {
@@ -56,7 +60,40 @@ public class ShadowFollower : MonoBehaviour
 
         string side = shadowOffsetX > 0 ? "right" : "left";
         Debug.Log($"Shadow is on the {side} of the player. Player is facing {(playerFacingLeft ? "left" : "right")}");
+
+        if (playerIsClimbing)
+        {
+            if (!shadowClimbing)
+            {
+                shadowClimbing = true;
+                StartCoroutine(FollowPlayerClimb());
+            }
+            return;
+        }
+
     }
+    IEnumerator FollowPlayerClimb()
+{
+    Vector2 startOffset = new Vector2(player.localScale.x < 0 ? 1.2f : -1.2f, 0f);
+    yield return new WaitForSeconds(climbDelay);
+
+    Vector2 targetPos = (Vector2)player.position + startOffset;
+
+    float climbDuration = 0.5f;
+    float elapsed = 0f;
+
+    Vector2 initialPos = transform.position;
+
+    while (elapsed < climbDuration)
+    {
+        transform.position = Vector2.Lerp(initialPos, targetPos, elapsed / climbDuration);
+        elapsed += Time.deltaTime;
+        yield return null;
+    }
+
+    transform.position = targetPos;
+    shadowClimbing = false;
+}
 
     public void SetOppositeSide(bool playerFacingLeft)
     {

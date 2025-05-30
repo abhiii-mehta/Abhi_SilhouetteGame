@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
             isClimbing = true;
         else if (!isOnLadder)
             isClimbing = false;
+        if (shadowFollower != null)
+            shadowFollower.playerIsClimbing = isClimbing;
 
         if (isClimbing)
         {
