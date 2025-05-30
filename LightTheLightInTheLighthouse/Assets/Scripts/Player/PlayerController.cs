@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private bool isOnLadder;
     private bool isClimbing;
 
+    public Transform triangle;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,7 +58,28 @@ public class PlayerController : MonoBehaviour
         }
 
         if (move != 0)
-            sr.flipX = move < 0;
+        {
+            Vector3 localScale = transform.localScale;
+            localScale.x = move < 0 ? -1f : 1f;
+            transform.localScale = localScale;
+
+            Debug.Log("Player is now facing " + (localScale.x < 0 ? "left" : "right"));
+
+            if (triangle != null)
+            {
+                float xPos = Mathf.Abs(triangle.localPosition.x);
+                bool facingLeft = move < 0;
+
+                triangle.localPosition = new Vector3(facingLeft ? -xPos : xPos, triangle.localPosition.y, triangle.localPosition.z);
+
+                triangle.localRotation = Quaternion.Euler(0, 0, facingLeft ? -270f : -90f);
+            }
+
+
+
+        }
+
+
 
         if (isClimbing)
         {
