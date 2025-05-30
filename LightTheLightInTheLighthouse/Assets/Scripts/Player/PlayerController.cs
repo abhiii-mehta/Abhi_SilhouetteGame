@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool isCrawling;
     private bool isOnLadder;
     private bool isClimbing;
-
+    public ShadowFollower shadowFollower;
     public Transform triangle;
     void Start()
     {
@@ -74,7 +74,10 @@ public class PlayerController : MonoBehaviour
 
                 triangle.localRotation = Quaternion.Euler(0, 0, facingLeft ? -270f : -90f);
             }
-
+            if (shadowFollower != null)
+            {
+                shadowFollower.SetOppositeSide(move < 0);
+            }
 
 
         }

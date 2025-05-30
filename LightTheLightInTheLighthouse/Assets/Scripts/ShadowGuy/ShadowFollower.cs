@@ -18,6 +18,7 @@ public class ShadowFollower : MonoBehaviour
 
     private SpriteRenderer sr;
     private SpriteRenderer playerSR;
+  
 
     void Start()
     {
@@ -42,14 +43,25 @@ public class ShadowFollower : MonoBehaviour
                 return;
             }
         }
+
         bool playerFacingLeft = player.localScale.x < 0;
-        Vector2 dynamicOffset = new Vector2(playerFacingLeft ? 1f : -1f, offset.y);
 
-        Vector2 targetPos = (Vector2)player.position + dynamicOffset;
+        float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f; 
+        
+        Vector2 targetPos = (Vector2)player.position + offset;
+        transform.position = targetPos;
 
-        transform.position = Vector2.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
         transform.localScale = player.localScale;
         sr.flipX = playerSR.flipX;
+
+        string side = shadowOffsetX > 0 ? "right" : "left";
+        Debug.Log($"Shadow is on the {side} of the player. Player is facing {(playerFacingLeft ? "left" : "right")}");
+    }
+
+    public void SetOppositeSide(bool playerFacingLeft)
+    {
+        float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f;
+        offset = new Vector2(shadowOffsetX, offset.y);
     }
 
     IEnumerator GlitchBehavior()
@@ -74,15 +86,5 @@ public class ShadowFollower : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isMisbehaving = false;
-    }
-
-    void LateUpdate()
-    {
-        if (player != null && !isMisbehaving)
-        {
-            transform.position = (Vector2)player.position + offset;
-            transform.localScale = player.localScale;
-            sr.flipX = playerSR.flipX;
-        }
     }
 }
