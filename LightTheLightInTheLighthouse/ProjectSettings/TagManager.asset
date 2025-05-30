@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ladder
   - LightZone
+  - Background
+  - Level
   layers:
   - Default
   - TransparentFX
@@ -14,8 +16,8 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
+  - Level
+  - Background
   - 
   - 
   - 
@@ -42,6 +44,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: World
+    uniqueID: 1254772057
     locked: 0
   m_RenderingLayers:
   - Default
