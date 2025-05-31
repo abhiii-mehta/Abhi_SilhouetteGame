@@ -24,15 +24,28 @@ public class ShadowFollower : MonoBehaviour
     private bool shadowClimbing = false;
     private float climbDelay = 0.4f;
 
+    public Animator shadowAnimator;
+    public Animator playerAnimator;
+
     void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         playerSR = player.GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update()
     {
+
+        if (!shadowAnimator || !playerAnimator) return;
+
+        shadowAnimator.SetBool("Run", playerAnimator.GetBool("Run"));
+        shadowAnimator.SetBool("Idle", playerAnimator.GetBool("Idle"));
+        shadowAnimator.SetBool("Jump", playerAnimator.GetBool("Jump"));
+        shadowAnimator.SetBool("Push", playerAnimator.GetBool("Push"));
+
+
         if (!player || isMisbehaving || !sr.enabled) return;
 
         glitchTimer += Time.deltaTime;

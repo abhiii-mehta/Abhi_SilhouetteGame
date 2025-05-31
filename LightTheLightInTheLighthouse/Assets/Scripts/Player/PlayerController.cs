@@ -17,16 +17,28 @@ public class PlayerController : MonoBehaviour
     private bool isOnLadder;
     private bool isClimbing;
     public ShadowFollower shadowFollower;
-    public Transform triangle;
+   
+   private Animator anim;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<BoxCollider2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
+        bool isJumping = !isGrounded && !isClimbing;
+        bool isRunning = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 && isGrounded && !isCrawling && !isClimbing;
+        bool isIdle = Input.GetAxisRaw("Horizontal") == 0 && isGrounded && !isJumping && !isClimbing && !isCrawling;
+        bool isPushing = isRunning && !isCrawling;
+        // Set Animator Booleans
+        anim.SetBool("Run", isRunning);
+        anim.SetBool("Idle", isIdle);
+        anim.SetBool("Jump", isJumping);
+        anim.SetBool("Push", isPushing);
+
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1f, groundLayer);
 
         float move = Input.GetAxisRaw("Horizontal");
@@ -67,24 +79,13 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("Player is now facing " + (localScale.x < 0 ? "left" : "right"));
 
-            if (triangle != null)
-            {
-                float xPos = Mathf.Abs(triangle.localPosition.x);
-                bool facingLeft = move < 0;
-
-                triangle.localPosition = new Vector3(facingLeft ? -xPos : xPos, triangle.localPosition.y, triangle.localPosition.z);
-
-                triangle.localRotation = Quaternion.Euler(0, 0, facingLeft ? -270f : -90f);
-            }
+           
             if (shadowFollower != null)
             {
                 shadowFollower.SetOppositeSide(move < 0);
             }
 
-
         }
-
-
 
         if (isClimbing)
         {
