@@ -68,7 +68,8 @@ public class ShadowFollower : MonoBehaviour
         Vector2 targetPos = (Vector2)player.position + offset;
         transform.position = targetPos;
 
-        transform.localScale = player.localScale;
+        sr.flipX = player.GetComponent<SpriteRenderer>().flipX;
+
         sr.flipX = playerSR.flipX;
 
         string side = shadowOffsetX > 0 ? "right" : "left";

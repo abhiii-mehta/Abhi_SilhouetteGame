@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         bool isRunning = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 && isGrounded && !isCrawling && !isClimbing;
         bool isIdle = Input.GetAxisRaw("Horizontal") == 0 && isGrounded && !isJumping && !isClimbing && !isCrawling;
         bool isPushing = isRunning && !isCrawling;
-        // Set Animator Booleans
+
         anim.SetBool("Run", isRunning);
         anim.SetBool("Idle", isIdle);
         anim.SetBool("Jump", isJumping);
@@ -72,13 +72,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (move != 0)
-        {
-            Vector3 localScale = transform.localScale;
-            localScale.x = move < 0 ? -1f : 1f;
-            transform.localScale = localScale;
-
-            Debug.Log("Player is now facing " + (localScale.x < 0 ? "left" : "right"));
-
+            if (move != 0)
+            {
+                bool facingLeft = move < 0;
+                sr.flipX = facingLeft;
+                transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
            
             if (shadowFollower != null)
             {
