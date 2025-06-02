@@ -7,6 +7,8 @@ public class MenuButtonController : MonoBehaviour
     [SerializeField] private string gameSceneName = "GameScene";
     [SerializeField] private string creditsSceneName = "CreditsScene";
     [SerializeField] private string settingsSceneName = "SettingsScene";
+    [SerializeField] private string menuSceneName = "MenuScene";
+
 
     // Button click methods
     public void OnStartButtonClicked()
@@ -22,6 +24,11 @@ public class MenuButtonController : MonoBehaviour
     public void OnSettingsButtonClicked()
     {
         LoadScene(settingsSceneName);
+    }
+
+    public void OnMenuButtonClicked()
+    {
+        LoadScene(menuSceneName);
     }
 
     public void OnExitButtonClicked()
