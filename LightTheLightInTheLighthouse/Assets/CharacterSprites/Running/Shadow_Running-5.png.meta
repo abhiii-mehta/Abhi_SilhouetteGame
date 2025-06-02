@@ -8,9 +8,6 @@ TextureImporter:
   - first:
       213: 4654564352978269579
     second: Shadow_Running-5_1
-  - first:
-      213: -6370954405781424146
-    second: Shadow_Running-5_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -144,7 +141,7 @@ TextureImporter:
       name: Shadow_Running-5_1
       rect:
         serializedVersion: 2
-        x: 9
+        x: 43
         y: 56
         width: 7
         height: 7
@@ -158,28 +155,6 @@ TextureImporter:
       bones: []
       spriteID: b85377b3e95589040800000000000000
       internalID: 4654564352978269579
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shadow_Running-5_2
-      rect:
-        serializedVersion: 2
-        x: 43
-        y: 56
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ee7303309b2d597a0800000000000000
-      internalID: -6370954405781424146
       vertices: []
       indices: 
       edges: []
@@ -200,7 +175,6 @@ TextureImporter:
     nameFileIdTable:
       Shadow_Running-5_0: 4346209892996486556
       Shadow_Running-5_1: 4654564352978269579
-      Shadow_Running-5_2: -6370954405781424146
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
