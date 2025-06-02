@@ -59,8 +59,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
-
-        // Flipping
+         
         if (move != 0)
         {
             bool facingLeft = move < 0;
@@ -79,18 +78,24 @@ public class PlayerController : MonoBehaviour
             col.size = new Vector2(1f, 1f);
 
         bool isJumping = !isGrounded && !isClimbing;
-        bool isRunning = Mathf.Abs(move) > 0 && isGrounded && !isCrawling && !isClimbing;
-        bool isPushing = isRunning && TouchingPushableObject();
+        bool isActuallyRunning = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 && isGrounded && !isCrawling && !isClimbing;
         bool isIdle = move == 0 && isGrounded && !isJumping && !isClimbing && !isCrawling;
+        bool isPushing = isActuallyRunning && TouchingPushableObject();
+        bool isRunning = isActuallyRunning && !isPushing;
 
+        anim.SetBool("Push", isPushing);
         anim.SetBool("Run", isRunning);
         anim.SetBool("Idle", isIdle);
         anim.SetBool("Jump", isJumping);
-        anim.SetBool("Push", isPushing);
         anim.SetBool("Crawl", isCrawling);
         anim.SetBool("Climb", isClimbing);
 
         Debug.DrawRay(transform.position, Vector2.down * 1f, Color.red);
+        if (isPushing)
+        {
+            Debug.Log("Push is true, playing push animation");
+        }
+
     }
 
 
@@ -108,10 +113,23 @@ public class PlayerController : MonoBehaviour
 
     private bool TouchingPushableObject()
     {
-        Vector2 direction = new Vector2(transform.localScale.x, 0f);
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.size, 0f, direction, 0.2f, groundLayer);
+        Vector2 direction = sr.flipX ? Vector2.left : Vector2.right;
+        Vector2 origin = transform.position;
+        Vector2 size = col.size;
+        float distance = 0.2f;
 
-        return hit.collider != null && hit.collider.CompareTag("Pushable");
+        RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, direction, distance, groundLayer);
+
+        Debug.DrawRay(origin + Vector2.up * (size.y / 2), direction * distance, Color.green);
+        Debug.DrawRay(origin - Vector2.up * (size.y / 2), direction * distance, Color.green);
+
+        if (hit.collider != null)
+        {
+            Debug.Log("Hit object: " + hit.collider.name);
+            return hit.collider.CompareTag("Pushable");
+        }
+
+        return false;
     }
 
 }
