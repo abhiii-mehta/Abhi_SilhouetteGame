@@ -6,15 +6,10 @@ public class ShadowFollower : MonoBehaviour
     public Transform player;
     public Vector2 offset = new Vector2(-1f, -0.1f);
     public float followSpeed = 5f;
-    private Rigidbody2D rb;
 
-    public float glitchCheckInterval = 10f;
-    public float glitchChance = 0.1f;
-    public float glitchDuration = 2f;
-    public float jumpForce = 5f;
+    public float idleThreshold = 3f;
 
     private float idleTimer = 0f;
-    private float idleThreshold = 3f;
     private bool isWandering = false;
 
     private SpriteRenderer sr;
@@ -32,24 +27,25 @@ public class ShadowFollower : MonoBehaviour
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         playerSR = player.GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-
     }
 
     void Update()
     {
-
-        if (!shadowAnimator || !playerAnimator) return;
-
-        shadowAnimator.SetBool("Run", playerAnimator.GetBool("Run"));
-        shadowAnimator.SetBool("Idle", playerAnimator.GetBool("Idle"));
-        shadowAnimator.SetBool("Jump", playerAnimator.GetBool("Jump"));
-        shadowAnimator.SetBool("Push", playerAnimator.GetBool("Push"));
+        if (!shadowAnimator || !playerAnimator || !player) return;
+        if (!isWandering)
+        {
+            shadowAnimator.SetBool("Run", playerAnimator.GetBool("Run"));
+            shadowAnimator.SetBool("Idle", playerAnimator.GetBool("Idle"));
+            shadowAnimator.SetBool("Jump", playerAnimator.GetBool("Jump"));
+            shadowAnimator.SetBool("Push", playerAnimator.GetBool("Push"));
+            shadowAnimator.SetBool("Crawl", playerAnimator.GetBool("Crawl"));
+            shadowAnimator.SetBool("Climb", playerAnimator.GetBool("Climb"));
+        }
 
         float playerHorizontal = Mathf.Abs(player.GetComponent<Rigidbody2D>().linearVelocity.x);
         bool playerIdle = playerHorizontal < 0.05f;
 
-        if (playerIdle && !isWandering)
+        if (playerIdle && !isWandering && !playerIsClimbing)
         {
             idleTimer += Time.deltaTime;
             if (idleTimer >= idleThreshold)
@@ -62,19 +58,18 @@ public class ShadowFollower : MonoBehaviour
             idleTimer = 0f;
         }
 
-        bool playerFacingLeft = player.localScale.x < 0;
+        if (!isWandering && !playerIsClimbing)
+        {
+            bool playerFacingLeft = player.localScale.x < 0;
+            float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f;
+            Vector2 targetPos = (Vector2)player.position + offset;
+            transform.position = targetPos;
 
-        float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f; 
-        
-        Vector2 targetPos = (Vector2)player.position + offset;
-        transform.position = targetPos;
+            sr.flipX = playerSR.flipX;
 
-        sr.flipX = player.GetComponent<SpriteRenderer>().flipX;
-
-        sr.flipX = playerSR.flipX;
-
-        string side = shadowOffsetX > 0 ? "right" : "left";
-        Debug.Log($"Shadow is on the {side} of the player. Player is facing {(playerFacingLeft ? "left" : "right")}");
+            string side = shadowOffsetX > 0 ? "right" : "left";
+            Debug.Log($"Shadow is on the {side} of the player. Player is facing {(playerFacingLeft ? "left" : "right")}");
+        }
 
         if (playerIsClimbing)
         {
@@ -83,49 +78,52 @@ public class ShadowFollower : MonoBehaviour
                 shadowClimbing = true;
                 StartCoroutine(FollowPlayerClimb());
             }
-            return;
+        }
+    }
+
+    IEnumerator FollowPlayerClimb()
+    {
+        Vector2 startOffset = new Vector2(player.localScale.x < 0 ? 1.2f : -1.2f, 0f);
+        yield return new WaitForSeconds(climbDelay);
+
+        Vector2 targetPos = (Vector2)player.position + startOffset;
+
+        float climbDuration = 0.5f;
+        float elapsed = 0f;
+        Vector2 initialPos = transform.position;
+
+        while (elapsed < climbDuration)
+        {
+            transform.position = Vector2.Lerp(initialPos, targetPos, elapsed / climbDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
+        transform.position = targetPos;
+        shadowClimbing = false;
     }
-    IEnumerator FollowPlayerClimb()
-{
-    Vector2 startOffset = new Vector2(player.localScale.x < 0 ? 1.2f : -1.2f, 0f);
-    yield return new WaitForSeconds(climbDelay);
-
-    Vector2 targetPos = (Vector2)player.position + startOffset;
-
-    float climbDuration = 0.5f;
-    float elapsed = 0f;
-
-    Vector2 initialPos = transform.position;
-
-    while (elapsed < climbDuration)
-    {
-        transform.position = Vector2.Lerp(initialPos, targetPos, elapsed / climbDuration);
-        elapsed += Time.deltaTime;
-        yield return null;
-    }
-
-    transform.position = targetPos;
-    shadowClimbing = false;
-}
 
     public void SetOppositeSide(bool playerFacingLeft)
     {
         float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f;
         offset = new Vector2(shadowOffsetX, offset.y);
     }
+
     IEnumerator WanderAwayAndReturn()
     {
         isWandering = true;
 
         Vector2 originalPos = transform.position;
-        Vector2 wanderTarget = originalPos + new Vector2(player.localScale.x > 0 ? -2f : 2f, 0f);
+        float playerX = player.position.x;
 
+        float direction = (originalPos.x < playerX) ? -1f : 1f;
+        Vector2 wanderTarget = originalPos + new Vector2(direction * 2f, 0f);
+
+        sr.flipX = wanderTarget.x < originalPos.x;
         shadowAnimator.SetBool("Run", true);
 
-        float elapsed = 0f;
         float duration = 0.75f;
+        float elapsed = 0f;
 
         while (elapsed < duration)
         {
@@ -134,7 +132,20 @@ public class ShadowFollower : MonoBehaviour
             yield return null;
         }
 
+        transform.position = wanderTarget;
+
+        sr.flipX = wanderTarget.x < originalPos.x;
+
+        shadowAnimator.SetBool("Run", false);
+        shadowAnimator.SetBool("Idle", true);
+
         yield return new WaitForSeconds(1f);
+
+        shadowAnimator.SetBool("Idle", false);
+        shadowAnimator.SetBool("Run", true);
+
+
+        sr.flipX = originalPos.x < wanderTarget.x;
 
         elapsed = 0f;
         while (elapsed < duration)
@@ -144,6 +155,7 @@ public class ShadowFollower : MonoBehaviour
             yield return null;
         }
 
+        transform.position = originalPos;
         shadowAnimator.SetBool("Run", false);
         isWandering = false;
         idleTimer = 0f;
