@@ -328,7 +328,7 @@ MonoBehaviour:
   gameSceneName: GameScene
   creditsSceneName: CreditsScene
   settingsSceneName: SettingsScene
-  menuSceneName: MenuScene
+  menuSceneName: MainMenu
 --- !u!1 &104705231
 GameObject:
   m_ObjectHideFlags: 0

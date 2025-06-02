@@ -1904,7 +1904,7 @@ MonoBehaviour:
   gameSceneName: GameScene
   creditsSceneName: CreditsScene
   settingsSceneName: SettingsScene
-  menuSceneName: MenuScene
+  menuSceneName: MainMenu
 --- !u!4 &1371447869
 Transform:
   m_ObjectHideFlags: 0
