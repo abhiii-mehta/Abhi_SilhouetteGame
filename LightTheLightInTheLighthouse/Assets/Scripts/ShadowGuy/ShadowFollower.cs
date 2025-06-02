@@ -6,15 +6,16 @@ public class ShadowFollower : MonoBehaviour
     public Transform player;
     public Vector2 offset = new Vector2(-1f, -0.1f);
     public float followSpeed = 5f;
+    private Rigidbody2D rb;
 
     public float glitchCheckInterval = 10f;
     public float glitchChance = 0.1f;
     public float glitchDuration = 2f;
     public float jumpForce = 5f;
 
-    private bool isMisbehaving = false;
-    private Rigidbody2D rb;
-    private float glitchTimer = 0f;
+    private float idleTimer = 0f;
+    private float idleThreshold = 3f;
+    private bool isWandering = false;
 
     private SpriteRenderer sr;
     private SpriteRenderer playerSR;
@@ -45,20 +46,20 @@ public class ShadowFollower : MonoBehaviour
         shadowAnimator.SetBool("Jump", playerAnimator.GetBool("Jump"));
         shadowAnimator.SetBool("Push", playerAnimator.GetBool("Push"));
 
+        float playerHorizontal = Mathf.Abs(player.GetComponent<Rigidbody2D>().linearVelocity.x);
+        bool playerIdle = playerHorizontal < 0.05f;
 
-        if (!player || isMisbehaving || !sr.enabled) return;
-
-        glitchTimer += Time.deltaTime;
-
-        if (glitchTimer >= glitchCheckInterval)
+        if (playerIdle && !isWandering)
         {
-            glitchTimer = 0f;
-
-            if (Random.value <= glitchChance)
+            idleTimer += Time.deltaTime;
+            if (idleTimer >= idleThreshold)
             {
-                StartCoroutine(GlitchBehavior());
-                return;
+                StartCoroutine(WanderAwayAndReturn());
             }
+        }
+        else
+        {
+            idleTimer = 0f;
         }
 
         bool playerFacingLeft = player.localScale.x < 0;
@@ -114,28 +115,38 @@ public class ShadowFollower : MonoBehaviour
         float shadowOffsetX = playerFacingLeft ? 1.2f : -1.2f;
         offset = new Vector2(shadowOffsetX, offset.y);
     }
-
-    IEnumerator GlitchBehavior()
+    IEnumerator WanderAwayAndReturn()
     {
-        isMisbehaving = true;
+        isWandering = true;
 
-        Vector2 oppositeOffset = -offset.normalized * 1.5f;
-        Vector2 glitchTarget = (Vector2)transform.position + oppositeOffset;
+        Vector2 originalPos = transform.position;
+        Vector2 wanderTarget = originalPos + new Vector2(player.localScale.x > 0 ? -2f : 2f, 0f);
 
-        float t = 0f;
-        while (t < 0.5f)
+        shadowAnimator.SetBool("Run", true);
+
+        float elapsed = 0f;
+        float duration = 0.75f;
+
+        while (elapsed < duration)
         {
-            transform.position = Vector2.Lerp(transform.position, glitchTarget, t * 2f);
-            t += Time.deltaTime;
+            transform.position = Vector2.Lerp(originalPos, wanderTarget, elapsed / duration);
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
         yield return new WaitForSeconds(1f);
 
-        rb.linearVelocity = new Vector2(0f, jumpForce);
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            transform.position = Vector2.Lerp(wanderTarget, originalPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
 
-        yield return new WaitForSeconds(0.5f);
-
-        isMisbehaving = false;
+        shadowAnimator.SetBool("Run", false);
+        isWandering = false;
+        idleTimer = 0f;
     }
+
 }
