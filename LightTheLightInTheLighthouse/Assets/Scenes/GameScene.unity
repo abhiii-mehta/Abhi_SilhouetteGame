@@ -1042,6 +1042,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1049026827314881718, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3624204659867952183, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1056,11 +1060,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.42
+      value: 590
       objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.25
+      value: -12.22
       objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.z
@@ -41565,7 +41569,7 @@ GameObject:
   - component: {fileID: 700451322}
   m_Layer: 3
   m_Name: Box (1)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47046,7 +47050,7 @@ GameObject:
   - component: {fileID: 1497725853}
   m_Layer: 3
   m_Name: Box (6)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47382,7 +47386,7 @@ GameObject:
   - component: {fileID: 1507954479}
   m_Layer: 3
   m_Name: Box
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47750,7 +47754,7 @@ GameObject:
   - component: {fileID: 1551056318}
   m_Layer: 3
   m_Name: Box (4)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47971,6 +47975,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1586659714}
   - component: {fileID: 1586659713}
+  - component: {fileID: 1586659715}
   m_Layer: 0
   m_Name: Ladder
   m_TagString: Ladder
@@ -48048,6 +48053,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1586659715
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586659712}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.016241685, y: 0.064029515}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.28, y: 1.28}
+    newSize: {x: 0.28, y: 1.28}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.53991055, y: 1.408059}
+  m_EdgeRadius: 0
 --- !u!1 &1588696141
 GameObject:
   m_ObjectHideFlags: 0
@@ -48062,7 +48113,7 @@ GameObject:
   - component: {fileID: 1588696142}
   m_Layer: 3
   m_Name: Box (7)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50702,7 +50753,7 @@ GameObject:
   - component: {fileID: 2050400974}
   m_Layer: 3
   m_Name: Box (3)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58908,7 +58959,7 @@ GameObject:
   - component: {fileID: 2071014358}
   - component: {fileID: 2071014360}
   - component: {fileID: 2071014359}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Forest_trees
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67426,7 +67477,7 @@ GameObject:
   - component: {fileID: 2117771911}
   m_Layer: 3
   m_Name: Box (2)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -67676,7 +67727,7 @@ GameObject:
   - component: {fileID: 2130455991}
   m_Layer: 3
   m_Name: Box (5)
-  m_TagString: Untagged
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
