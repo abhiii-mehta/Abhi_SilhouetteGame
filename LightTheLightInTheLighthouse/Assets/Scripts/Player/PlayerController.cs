@@ -29,31 +29,20 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        bool isJumping = !isGrounded && !isClimbing;
-        bool isRunning = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 && isGrounded && !isCrawling && !isClimbing;
-        bool isIdle = Input.GetAxisRaw("Horizontal") == 0 && isGrounded && !isJumping && !isClimbing && !isCrawling;
-        bool isPushing = isRunning && !isCrawling;
-
-        anim.SetBool("Run", isRunning);
-        anim.SetBool("Idle", isIdle);
-        anim.SetBool("Jump", isJumping);
-        anim.SetBool("Push", isPushing);
-
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, 1f, groundLayer);
 
         float move = Input.GetAxisRaw("Horizontal");
+        float vInput = Input.GetAxisRaw("Vertical");
 
         bool isCrouch = (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && isGrounded;
         isCrawling = isCrouch;
-
         float speed = isCrawling ? crawlSpeed : moveSpeed;
-
-        float vInput = Input.GetAxisRaw("Vertical");
 
         if (isOnLadder && Mathf.Abs(vInput) > 0f)
             isClimbing = true;
         else if (!isOnLadder)
             isClimbing = false;
+
         if (shadowFollower != null)
             shadowFollower.playerIsClimbing = isClimbing;
 
@@ -71,41 +60,39 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
+        // Flipping
         if (move != 0)
-            if (move != 0)
-            {
-                bool facingLeft = move < 0;
-                sr.flipX = facingLeft;
-                transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
-           
-            if (shadowFollower != null)
-            {
-                shadowFollower.SetOppositeSide(move < 0);
-            }
+        {
+            bool facingLeft = move < 0;
+            sr.flipX = facingLeft;
+            transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
 
+            if (shadowFollower != null)
+                shadowFollower.SetOppositeSide(facingLeft);
         }
 
         if (isClimbing)
-        {
-            sr.color = Color.blue;
-            transform.localScale = new Vector3(1f, 1f, 1f);
             col.size = new Vector2(1f, 1f);
-        }
         else if (isCrawling)
-        {
-            sr.color = Color.gray;
-            transform.localScale = new Vector3(1f, 0.5f, 1f);
             col.size = new Vector2(1f, 0.5f);
-        }
         else
-        {
-            sr.color = Color.white;
-            transform.localScale = new Vector3(1f, 1f, 1f);
             col.size = new Vector2(1f, 1f);
-        }
+
+        bool isJumping = !isGrounded && !isClimbing;
+        bool isRunning = Mathf.Abs(move) > 0 && isGrounded && !isCrawling && !isClimbing;
+        bool isPushing = isRunning && TouchingPushableObject();
+        bool isIdle = move == 0 && isGrounded && !isJumping && !isClimbing && !isCrawling;
+
+        anim.SetBool("Run", isRunning);
+        anim.SetBool("Idle", isIdle);
+        anim.SetBool("Jump", isJumping);
+        anim.SetBool("Push", isPushing);
+        anim.SetBool("Crawl", isCrawling);
+        anim.SetBool("Climb", isClimbing);
 
         Debug.DrawRay(transform.position, Vector2.down * 1f, Color.red);
     }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -118,4 +105,13 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Ladder"))
             isOnLadder = false;
     }
+
+    private bool TouchingPushableObject()
+    {
+        Vector2 direction = new Vector2(transform.localScale.x, 0f);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, col.size, 0f, direction, 0.2f, groundLayer);
+
+        return hit.collider != null && hit.collider.CompareTag("Pushable");
+    }
+
 }
