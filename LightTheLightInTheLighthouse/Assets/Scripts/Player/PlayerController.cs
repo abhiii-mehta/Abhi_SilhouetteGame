@@ -97,13 +97,21 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ladder"))
+        {
             isOnLadder = true;
+
+            if (shadowFollower != null && !shadowFollower.isFinalClimb)
+            {
+                shadowFollower.isFinalClimb = true;
+                shadowFollower.fadeStartY = transform.position.y;
+                shadowFollower.fadeEndY = transform.position.y + 5f; // adjust if ladder is taller
+            }
+        }
     }
+
 
     void OnTriggerExit2D(Collider2D other)
     {

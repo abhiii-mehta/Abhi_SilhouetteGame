@@ -8,6 +8,9 @@ public class ShadowFollower : MonoBehaviour
     public float followSpeed = 5f;
 
     public float idleThreshold = 3f;
+    public bool isFinalClimb = false;
+    public float fadeStartY;
+    public float fadeEndY;
 
     private float idleTimer = 0f;
     private bool isWandering = false;
@@ -32,6 +35,24 @@ public class ShadowFollower : MonoBehaviour
     void Update()
     {
         if (!shadowAnimator || !playerAnimator || !player) return;
+
+        if (isFinalClimb)
+        {
+            shadowAnimator.SetBool("Idle", true);
+
+            Vector2 groundPos = new Vector2(player.position.x + (player.localScale.x > 0 ? -1.2f : 1.2f), transform.position.y);
+            transform.position = groundPos;
+
+            float climbProgress = Mathf.InverseLerp(fadeStartY, fadeEndY, player.position.y);
+            float alpha = Mathf.Lerp(1f, 0f, climbProgress);
+
+            Color currentColor = sr.color;
+            currentColor.a = alpha;
+            sr.color = currentColor;
+
+            return;
+        }
+
         if (!isWandering)
         {
             shadowAnimator.SetBool("Run", playerAnimator.GetBool("Run"));
