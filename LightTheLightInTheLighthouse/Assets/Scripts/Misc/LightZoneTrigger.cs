@@ -47,4 +47,9 @@ public class LightZoneTrigger : MonoBehaviour
             timer = 0f;
         }
     }
+    public bool IsLightStillWorking()
+    {
+        BreakableLight breakable = GetComponentInParent<BreakableLight>();
+        return breakable != null && breakable.lightComponent.enabled;
+    }
 }
