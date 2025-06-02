@@ -1046,6 +1046,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 0410754a2dff5164baa4863af138719d, type: 2}
+    - target: {fileID: 3825561616795589663, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
+      propertyPath: jumpForce
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4419209290280484007, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
+      propertyPath: m_SortingOrder
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.42
@@ -1090,6 +1098,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: aef92a888cecbe7498f48c0938a2038c, type: 2}
+    - target: {fileID: 6186678713146294061, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
+      propertyPath: m_SortingOrder
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
