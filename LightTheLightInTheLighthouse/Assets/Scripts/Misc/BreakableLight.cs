@@ -5,6 +5,12 @@ public class BreakableLight : MonoBehaviour
 {
     public bool canBeBroken = true;
     public Light2D lightComponent;
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     public void Break()
     {
@@ -14,6 +20,15 @@ public class BreakableLight : MonoBehaviour
         {
             lightComponent.enabled = false;
             Debug.Log("Light has been broken!");
+
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
+            else
+            {
+                Debug.LogWarning("No AudioSource found on " + gameObject.name);
+            }
         }
         else
         {
