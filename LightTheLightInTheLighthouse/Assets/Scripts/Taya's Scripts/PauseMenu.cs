@@ -67,6 +67,15 @@ public class PauseMenu : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void ReturnToMainMenu()
+    {
+        // Always reset time scale before loading a new scene
+        Time.timeScale = 1f;
+
+        // Use MenuButtonController's method to load the menu
+        FindObjectOfType<MenuButtonController>().OnMenuButtonClicked();
+    }
+
     private void DisablePlayerControls(bool disable)
     {
         GameObject player = GameObject.FindGameObjectWithTag(playerTag);
