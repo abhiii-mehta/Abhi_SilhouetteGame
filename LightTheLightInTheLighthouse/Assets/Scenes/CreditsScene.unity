@@ -790,7 +790,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -188}
+  m_AnchoredPosition: {x: 0, y: -231}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1155826262
@@ -820,7 +820,14 @@ MonoBehaviour:
 
 
     Taisia
-    Malakhova: Character design, Art'
+    Malakhova: Character design, Art
+
+
+
+    Tilemaps are from itch,io
+
+    Music
+    is from Unity Assets'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3bcfcc4a57745fc498fdff2b40b8b0ca, type: 2}
   m_sharedMaterial: {fileID: 9157962023218905487, guid: 3bcfcc4a57745fc498fdff2b40b8b0ca, type: 2}
