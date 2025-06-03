@@ -38,6 +38,9 @@ public class MenuButtonController : MonoBehaviour
 
     private void LoadScene(string sceneName)
     {
+        // Always reset time scale before loading a new scene
+        Time.timeScale = 1f;
+
         // Optional: Add fade-out effect or loading screen here
         SceneManager.LoadScene(sceneName);
     }
