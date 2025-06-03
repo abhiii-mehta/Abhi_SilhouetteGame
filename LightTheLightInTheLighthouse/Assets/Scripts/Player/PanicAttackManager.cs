@@ -18,6 +18,7 @@ public class PanicAttackManager : MonoBehaviour
     private Coroutine panicCoroutine = null;
     private bool hasLoggedDarknessEntry = false;
     public Cameracontroller cameraShake;
+    public AudioSource panicAudio;
 
     void Update()
     {
@@ -78,13 +79,14 @@ public class PanicAttackManager : MonoBehaviour
 
         if (panicCoroutine != null)
             StopCoroutine(panicCoroutine);
+        if (panicAudio != null && !panicAudio.isPlaying)
+            StartCoroutine(FadeAudioIn(panicAudio, 1f)); // 1 second fade-in
 
         panicCoroutine = StartCoroutine(PanicTimer());
         if (cameraShake != null)
             cameraShake.StartShake();
 
     }
-
     void StopPanicAttack()
     {
         if (panicCoroutine != null)
@@ -100,6 +102,8 @@ public class PanicAttackManager : MonoBehaviour
 
         if (cameraShake != null)
             cameraShake.StopShake();
+        if (panicAudio != null && panicAudio.isPlaying)
+            StartCoroutine(FadeAudioOut(panicAudio, 1f)); // 1 second fade-out
 
     }
 
@@ -124,10 +128,11 @@ public class PanicAttackManager : MonoBehaviour
 
         Debug.Log("PLAYER HAD A PANIC ATTACK. GAME OVER.");
         eyesUIPlayer.HideEyes();
+        if (panicAudio != null && panicAudio.isPlaying)
+            panicAudio.Stop();
 
         if (cameraShake != null)
             cameraShake.StopShake();
-
         TriggerGameOver();
     }
 
@@ -145,4 +150,36 @@ public class PanicAttackManager : MonoBehaviour
 
         Time.timeScale = 0f;
     }
+    IEnumerator FadeAudioIn(AudioSource audioSource, float duration)
+    {
+        float timer = 0f;
+        audioSource.volume = 0f;
+        audioSource.Play();
+
+        while (timer < duration)
+        {
+            audioSource.volume = Mathf.Lerp(0f, 1f, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = 1f;
+    }
+
+    IEnumerator FadeAudioOut(AudioSource audioSource, float duration)
+    {
+        float startVolume = audioSource.volume;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        audioSource.Stop();
+    }
+
 }
