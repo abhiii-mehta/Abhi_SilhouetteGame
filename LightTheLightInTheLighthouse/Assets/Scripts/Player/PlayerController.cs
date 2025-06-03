@@ -10,20 +10,25 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
-    private BoxCollider2D col;
+    private CapsuleCollider2D col;
 
     private bool isGrounded;
     private bool isCrawling;
     private bool isOnLadder;
     private bool isClimbing;
     public ShadowFollower shadowFollower;
-   
-   private Animator anim;
+
+    private Animator anim;
+
+    private float stuckCheckTimer = 0f;
+    private float stuckDurationThreshold = 0.25f;
+    private Vector2 lastPosition;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        col = GetComponent<BoxCollider2D>();
+        col = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
     }
 
@@ -59,7 +64,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
-         
+
         if (move != 0)
         {
             bool facingLeft = move < 0;
@@ -95,8 +100,33 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Push is true, playing push animation");
         }
+        if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0 && isGrounded)
+        {
+            stuckCheckTimer += Time.deltaTime;
+
+            if (Vector2.Distance(transform.position, lastPosition) < 0.01f)
+            {
+                if (stuckCheckTimer >= stuckDurationThreshold)
+                {
+                    rb.position += Vector2.up * 0.05f;
+                    Debug.Log("Nudged player upward to unstick.");
+                    stuckCheckTimer = 0f;
+                }
+            }
+            else
+            {
+                stuckCheckTimer = 0f;
+            }
+
+            lastPosition = transform.position;
+        }
+        else
+        {
+            stuckCheckTimer = 0f;
+        }
 
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Ladder"))
@@ -107,11 +137,10 @@ public class PlayerController : MonoBehaviour
             {
                 shadowFollower.isFinalClimb = true;
                 shadowFollower.fadeStartY = transform.position.y;
-                shadowFollower.fadeEndY = transform.position.y + 5f; // adjust if ladder is taller
+                shadowFollower.fadeEndY = transform.position.y + 5f;
             }
         }
     }
-
 
     void OnTriggerExit2D(Collider2D other)
     {
@@ -139,5 +168,4 @@ public class PlayerController : MonoBehaviour
 
         return false;
     }
-
 }
