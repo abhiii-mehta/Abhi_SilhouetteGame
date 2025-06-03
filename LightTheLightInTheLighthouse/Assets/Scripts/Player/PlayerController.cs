@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
+
+        transform.localScale = new Vector3(1.3f, 1.3f, 1f);
     }
 
     void Update()
@@ -69,7 +71,6 @@ public class PlayerController : MonoBehaviour
         {
             bool facingLeft = move < 0;
             sr.flipX = facingLeft;
-            transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
 
             if (shadowFollower != null)
                 shadowFollower.SetOppositeSide(facingLeft);
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
         if (isClimbing)
             col.size = new Vector2(1f, 1f);
         else if (isCrawling)
-            col.size = new Vector2(1f, 0.5f);
+            col.size = new Vector2(0.7f, 0.3f);
         else
             col.size = new Vector2(1f, 1f);
 
@@ -124,7 +125,6 @@ public class PlayerController : MonoBehaviour
         {
             stuckCheckTimer = 0f;
         }
-
     }
 
     void OnTriggerEnter2D(Collider2D other)
