@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Rendering.LookDev;
 
 public class PanicAttackManager : MonoBehaviour
 {
