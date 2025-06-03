@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,12 +25,15 @@ public class PlayerController : MonoBehaviour
     private float stuckDurationThreshold = 0.25f;
     private Vector2 lastPosition;
 
+    private AudioSource audioSource;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         col = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         transform.localScale = new Vector3(1.3f, 1.3f, 1f);
     }
@@ -62,9 +66,14 @@ public class PlayerController : MonoBehaviour
         {
             rb.gravityScale = 3f;
             rb.linearVelocity = new Vector2(move * speed, rb.linearVelocity.y);
-
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+                if (audioSource != null)
+                    audioSource.Play();
+            }
+
         }
 
         if (move != 0)
