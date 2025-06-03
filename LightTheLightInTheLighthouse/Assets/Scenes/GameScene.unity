@@ -1318,7 +1318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 150.6
+      value: -3.75
       objectReference: {fileID: 0}
     - target: {fileID: 5146324205704435684, guid: 45c0ff9abec77ef4e8cbfe1272ed5d30, type: 3}
       propertyPath: m_LocalPosition.y
@@ -59584,6 +59584,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 709799154}
     - target: {fileID: 1734300415128219438, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
+      propertyPath: timeBeforePanic
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1734300415128219438, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
       propertyPath: cameraController
       value: 
       objectReference: {fileID: 2091377461}
@@ -86798,7 +86802,7 @@ Transform:
   m_GameObject: {fileID: 2091377459}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -114.36155, y: 3.0900002, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 0.7692308, y: 0.7692308, z: 0.7692308}
   m_ConstrainProportionsScale: 1
   m_Children: []
