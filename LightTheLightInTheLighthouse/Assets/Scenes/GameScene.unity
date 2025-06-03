@@ -58660,6 +58660,14 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 975344284}
+    - target: {fileID: 1943208200585307572, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -78
+      objectReference: {fileID: 0}
+    - target: {fileID: 1943208200585307572, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 299
+      objectReference: {fileID: 0}
     - target: {fileID: 1970849276318521391, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
       propertyPath: cameraController
       value: 
