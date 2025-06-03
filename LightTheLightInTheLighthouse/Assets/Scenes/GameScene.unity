@@ -59542,7 +59542,7 @@ PrefabInstance:
     - target: {fileID: 1734300415128219438, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
       propertyPath: cameraShake
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2091377461}
     - target: {fileID: 1734300415128219438, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
       propertyPath: loseGamePanel
       value: 
@@ -59555,6 +59555,10 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 975344284}
+    - target: {fileID: 1970849276318521391, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 2091377461}
     - target: {fileID: 3675023449178743343, guid: 340b7fc6df5df7045b7922439c13b975, type: 3}
       propertyPath: m_LocalPosition.x
       value: 28.180113

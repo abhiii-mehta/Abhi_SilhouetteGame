@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Rendering.LookDev;
 
 public class PanicAttackManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class PanicAttackManager : MonoBehaviour
     private bool panicTriggered = false;
     private Coroutine panicCoroutine = null;
     private bool hasLoggedDarknessEntry = false;
+    public Cameracontroller cameraShake;
 
     void Update()
     {
@@ -78,6 +80,9 @@ public class PanicAttackManager : MonoBehaviour
             StopCoroutine(panicCoroutine);
 
         panicCoroutine = StartCoroutine(PanicTimer());
+        if (cameraShake != null)
+            cameraShake.StartShake();
+
     }
 
     void StopPanicAttack()
@@ -92,6 +97,10 @@ public class PanicAttackManager : MonoBehaviour
         panicTriggered = false;
         darknessTimer = 0f;
         hasLoggedDarknessEntry = false;
+
+        if (cameraShake != null)
+            cameraShake.StopShake();
+
     }
 
     IEnumerator PanicTimer()
@@ -115,6 +124,10 @@ public class PanicAttackManager : MonoBehaviour
 
         Debug.Log("PLAYER HAD A PANIC ATTACK. GAME OVER.");
         eyesUIPlayer.HideEyes();
+
+        if (cameraShake != null)
+            cameraShake.StopShake();
+
         TriggerGameOver();
     }
 
